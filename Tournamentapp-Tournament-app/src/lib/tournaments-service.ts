@@ -30,11 +30,22 @@ const getTeamType = (format: string = ''): TeamType => {
 };
 
 const generateBracketStructure = (maxTeams: number, tournamentId: string): Round[] => {
+    // For small team counts, handle them specially
+    if (maxTeams <= 1) return [];
+    
     // Calculate the minimum bracket size that can accommodate maxTeams
     let bracketSize = 2;
     while (bracketSize < maxTeams) bracketSize *= 2;
 
-    const roundNamesMap: Record<number, string> = { 2: 'Finals', 4: 'Semi-finals', 8: 'Quarter-finals', 16: 'Round of 16', 32: 'Round of 32', 64: 'Round of 64' };
+    const roundNamesMap: Record<number, string> = { 
+        2: 'Finals', 
+        4: 'Semi-finals', 
+        8: 'Quarter-finals', 
+        16: 'Round of 16', 
+        32: 'Round of 32', 
+        64: 'Round of 64' 
+    };
+    
     const rounds: Round[] = [];
     let currentSize = bracketSize;
 
@@ -43,15 +54,18 @@ const generateBracketStructure = (maxTeams: number, tournamentId: string): Round
         
         let numMatches;
         if (currentSize === bracketSize) { 
-            // First round: Only create matches for teams that need to play
-            // For 6 teams in 8-team bracket: 6 - 4 = 2 matches needed (4 teams get byes to semifinals)
-            numMatches = Math.max(0, maxTeams - (bracketSize / 2));
+            // First round: Only create matches for teams that actually need to play
+            // Teams that need to play = maxTeams - teams that get byes
+            // Teams that get byes = bracketSize - maxTeams
+            // So matches needed = (maxTeams - (bracketSize - maxTeams)) / 2 = (2 * maxTeams - bracketSize) / 2
+            const teamsPlaying = maxTeams - (bracketSize - maxTeams);
+            numMatches = Math.max(0, Math.floor(teamsPlaying / 2));
         } else {
-            // Subsequent rounds: normal calculation
+            // Subsequent rounds: normal calculation based on bracket structure
             numMatches = currentSize / 2;
         }
 
-        // Only create the round if it has matches
+        // Only create the round if it has matches and makes sense in the tournament structure
         if (numMatches > 0) {
             const matches: Match[] = Array.from({ length: numMatches }, (_, i) => ({
                 id: `${tournamentId}_${roundName.replace(/\s+/g, '-')}_m${i + 1}`,

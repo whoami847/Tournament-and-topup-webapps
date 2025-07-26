@@ -1,0 +1,62 @@
+'use client';
+import Link from 'next/link';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { XCircle } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+
+function PaymentFailContent() {
+  const searchParams = useSearchParams();
+  const status = searchParams.get('status');
+  const error = searchParams.get('error');
+
+  let message = "Unfortunately, we were unable to process your tournament entry fee payment. Your order has been marked as failed. Please try again or use a different payment method.";
+  if (status === 'cancel') {
+    message = "Your payment has been cancelled. You can try again anytime."
+  }
+  if (status === 'verificationfailed') {
+    message = "Your payment could not be verified. Please contact support if the amount was debited from your account."
+  }
+  if (error) {
+    message = "An unexpected error occurred. Please contact support for assistance."
+  }
+
+  return (
+    <Card className="max-w-lg mx-auto">
+      <CardContent className="flex flex-col items-center justify-center gap-6 p-8 md:p-12 text-center">
+        <XCircle className="h-20 w-20 text-destructive" />
+        <h1 className="text-3xl font-bold">Payment Failed or Cancelled</h1>
+        <p className="text-muted-foreground">
+          {message}
+        </p>
+        <div className="flex gap-4 mt-4">
+          <Link href="/tournaments" passHref>
+            <Button size="lg">Back to Tournaments</Button>
+          </Link>
+          <Link href="/" passHref>
+            <Button size="lg" variant="outline">Go to Home</Button>
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function PaymentFailPage() {
+  return (
+    <div className="container py-12 md:py-24">
+      <Suspense fallback={
+        <Card className="max-w-lg mx-auto">
+          <CardContent className="flex flex-col items-center justify-center gap-6 p-8 md:p-12 text-center">
+            <XCircle className="h-20 w-20 text-destructive" />
+            <h1 className="text-3xl font-bold">Payment Failed or Cancelled</h1>
+            <p className="text-muted-foreground">Loading...</p>
+          </CardContent>
+        </Card>
+      }>
+        <PaymentFailContent />
+      </Suspense>
+    </div>
+  );
+}

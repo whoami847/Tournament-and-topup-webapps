@@ -167,19 +167,55 @@ export default function TournamentDetailsClient({ initialTournament }: { initial
     }
 
     if (tournament!.entryFee > 0) {
-        if (profile.balance < tournament!.entryFee) {
-            toast({
-                title: "Insufficient Balance",
-                description: "Please add funds to your wallet to join this tournament.",
-                variant: "destructive",
-            });
-            router.push('/wallet');
-        } else {
-            router.push(`/tournaments/${tournament!.id}/join`);
-        }
+        // For paid tournaments, directly proceed to payment
+        handlePaymentFlow();
     } else {
         // Free entry
         router.push(`/tournaments/${tournament!.id}/join`);
+    }
+  };
+
+  const handlePaymentFlow = async () => {
+    if (!tournament || !user) return;
+
+    try {
+      toast({
+        title: "Initiating Payment",
+        description: "Please wait while we prepare your payment...",
+      });
+
+      const response = await fetch('/api/payment/initiate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: tournament.entryFee,
+          userId: user.uid,
+          tournamentId: tournament.id,
+          description: `Tournament Entry Fee - ${tournament.name}`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.payment_url) {
+        // Redirect to payment gateway
+        window.location.href = data.payment_url;
+      } else {
+        toast({
+          title: "Payment Failed",
+          description: data.message || "Failed to initiate payment. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Payment initiation error:', error);
+      toast({
+        title: "Payment Error",
+        description: "An error occurred while initiating payment. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 

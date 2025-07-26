@@ -279,6 +279,22 @@ export default function JoinTournamentClient() {
         if (!tournament || !profile || !user) return;
         setIsSubmitting(true);
 
+        // For paid tournaments, check if payment has been made
+        if (tournament.entryFee > 0) {
+            // Check if user has a completed payment for this tournament
+            const hasValidPayment = await checkPaymentStatus(tournament.id, user.uid);
+            if (!hasValidPayment) {
+                toast({
+                    title: "Payment Required",
+                    description: "Please complete the payment to join this tournament.",
+                    variant: "destructive",
+                });
+                setIsSubmitting(false);
+                router.push(`/tournaments/${tournament.id}`);
+                return;
+            }
+        }
+
         const newParticipant: Team = {
             id: `team-${Date.now()}`,
             name: values.teamName || team?.name || `Team ${profile.name}`,
@@ -308,6 +324,18 @@ export default function JoinTournamentClient() {
         }
         setIsSubmitting(false);
     }
+
+    // Check if user has made payment for this tournament
+    const checkPaymentStatus = async (tournamentId: string, userId: string): Promise<boolean> => {
+        try {
+            const response = await fetch(`/api/payment/check-status?tournamentId=${tournamentId}&userId=${userId}`);
+            const data = await response.json();
+            return data.hasValidPayment || false;
+        } catch (error) {
+            console.error('Error checking payment status:', error);
+            return false;
+        }
+    };
 
     const joinOptions = useMemo(() => {
         if (!tournament) return [];

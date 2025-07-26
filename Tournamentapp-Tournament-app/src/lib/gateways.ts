@@ -1,7 +1,7 @@
-export interface Gateway {
+export type Gateway = {
   id: string;
-  name: 'RupantorPay';
-  storePassword: string;
+  name: string;
+  storePassword?: string;
   isLive: boolean;
   enabled: boolean;
-}
+};
