@@ -3,6 +3,9 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { firestore } from '@/lib/firebase';
 import type { TopupRequest } from '@/types';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const tournamentId = searchParams.get('tournamentId');

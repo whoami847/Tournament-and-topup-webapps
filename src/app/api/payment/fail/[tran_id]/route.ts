@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '@/lib/firebase';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export async function generateStaticParams() {
+  return [];
+}
+
 export async function POST(
   req: NextRequest,
   { params }: { params: { tran_id: string } }

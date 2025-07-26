@@ -5,6 +5,9 @@ import type { Gateway } from '@/lib/gateways';
 import type { Order } from '@/lib/payments';
 import { format } from 'date-fns';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const RUPANTORPAY_API_URL = 'https://payment.rupantorpay.com/api/payment/checkout';
 
 export async function POST(req: NextRequest) {

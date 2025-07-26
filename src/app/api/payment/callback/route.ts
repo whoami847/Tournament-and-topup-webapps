@@ -5,6 +5,9 @@ import type { Gateway } from '@/lib/gateways';
 import type { Order, Transaction } from '@/lib/payments';
 import { format } from 'date-fns';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const RUPANTORPAY_VERIFY_URL = 'https://payment.rupantorpay.com/api/payment/verify-payment';
 
 export async function GET(req: NextRequest) {

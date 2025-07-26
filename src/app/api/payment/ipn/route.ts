@@ -6,6 +6,9 @@ import type { Order, Transaction } from '@/lib/payments';
 import { getPaymentService } from '@/lib/payment-services';
 import { format } from 'date-fns';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
