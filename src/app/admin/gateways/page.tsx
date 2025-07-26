@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppStore } from "@/lib/store";
 import { Gateway } from "@/lib/gateways";
 import { Button } from "@/components/ui/button";
@@ -24,10 +24,15 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 
 export default function GatewaysPage() {
-  const { gateways, deleteGateway } = useAppStore();
+  const { gateways, loadGateways, deleteGateway } = useAppStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedGateway, setSelectedGateway] = useState<Gateway | null>(null);
   const { toast } = useToast();
+
+  // Load gateways on component mount
+  useEffect(() => {
+    loadGateways();
+  }, [loadGateways]);
 
   const handleEdit = (gateway: Gateway) => {
     setSelectedGateway(gateway);

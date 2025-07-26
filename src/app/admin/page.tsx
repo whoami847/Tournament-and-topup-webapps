@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import { Card, CardContent } from "@/components/ui/card";
-import { LayoutDashboard, Users, Swords, List, Settings, LucideIcon, Gamepad2, Image as ImageIcon, ClipboardCheck, Award, Banknote, ListChecks, Upload, History } from "lucide-react";
+import { LayoutDashboard, Users, Swords, List, Settings, LucideIcon, Gamepad2, Image as ImageIcon, ClipboardCheck, Award, Banknote, ListChecks, Upload, History, CreditCard, Receipt } from "lucide-react";
 
 const adminControls: { href: string; icon: LucideIcon; label: string }[] = [
   { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -12,6 +12,9 @@ const adminControls: { href: string; icon: LucideIcon; label: string }[] = [
   { href: '/admin/results-approval', icon: ClipboardCheck, label: 'Results Approval' },
   { href: '/admin/prize-approvals', icon: Award, label: 'Prize Approvals' },
   { href: '/admin/requests', icon: List, label: 'Registration Log' },
+  { href: '/admin/gateways', icon: CreditCard, label: 'Payment Gateways' },
+  { href: '/admin/payment-orders', icon: Receipt, label: 'Payment Orders' },
+  { href: '/admin/transactions', icon: History, label: 'Transactions' },
   { href: '/admin/topup-settings', icon: Settings, label: 'Topup Settings' },
   { href: '/admin/topup-requests', icon: Upload, label: 'Topup Requests' },
   { href: '/admin/withdraw-methods', icon: Banknote, label: 'Withdraw Methods' },

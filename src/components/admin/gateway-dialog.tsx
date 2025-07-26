@@ -37,10 +37,12 @@ export function GatewayDialog({
 
   useEffect(() => {
     if (gateway) {
-      setStorePassword(gateway.storePassword);
+      setName(gateway.name);
+      setStorePassword(gateway.storePassword || "");
       setIsLive(gateway.isLive);
       setEnabled(gateway.enabled);
     } else {
+      setName("RupantorPay");
       setStorePassword("");
       setIsLive(false);
       setEnabled(true);
@@ -58,9 +60,9 @@ export function GatewayDialog({
         toast({ title: "Success", description: "Gateway updated successfully." });
       } else {
         await addGateway({
-          name: "RupantorPay",
+          name,
           storePassword,
-isLive,
+          isLive,
           enabled,
         });
         toast({ title: "Success", description: "Gateway added successfully." });
@@ -83,8 +85,8 @@ isLive,
           <DialogTitle>{gateway ? "Edit Gateway" : "Add Gateway"}</DialogTitle>
           <DialogDescription>
             {gateway
-              ? "Update the details of your RupantorPay gateway."
-              : "Add a new RupantorPay gateway to accept payments."}
+              ? "Update the details of your payment gateway."
+              : "Add a new payment gateway to accept payments."}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -92,7 +94,13 @@ isLive,
             <Label htmlFor="name" className="text-right">
               Gateway Name
             </Label>
-            <Input id="name" value={name} disabled className="col-span-3" />
+            <Input 
+              id="name" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g., RupantorPay, SSLCommerz"
+              className="col-span-3" 
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="store-password" className="text-right">
