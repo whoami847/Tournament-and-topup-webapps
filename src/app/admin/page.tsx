@@ -35,10 +35,29 @@ const AdminControlCard = ({ href, icon: Icon, label }: { href: string; icon: Luc
 
 export default function AdminPage() {
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {adminControls.map((control) => (
-                <AdminControlCard key={control.href} {...control} />
-            ))}
+        <div className="space-y-6">
+            <div>
+                <h2 className="text-2xl font-bold mb-2">Admin Dashboard</h2>
+                <p className="text-muted-foreground">Manage your esports platform from here</p>
+            </div>
+            
+            {/* Desktop Layout */}
+            <div className="hidden md:block">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+                    {adminControls.map((control) => (
+                        <AdminControlCard key={control.href} {...control} />
+                    ))}
+                </div>
+            </div>
+            
+            {/* Mobile Layout */}
+            <div className="md:hidden">
+                <div className="grid grid-cols-2 gap-4">
+                    {adminControls.map((control) => (
+                        <AdminControlCard key={control.href} {...control} />
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

@@ -238,13 +238,13 @@ export default function TournamentDetailsClient({ initialTournament }: { initial
             team={teamForSubmission}
         />
     )}
-    <div className="container mx-auto px-4 py-8 md:pb-8 pb-24">
+    <div className="container mx-auto px-4 py-8 md:pb-8 pb-24 max-w-6xl">
       <div className="space-y-8">
         <motion.header
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative h-64 md:h-80 rounded-lg overflow-hidden"
+          className="relative h-48 md:h-64 lg:h-80 rounded-lg overflow-hidden"
         >
           <Image
             src={tournament.image}
@@ -254,9 +254,21 @@ export default function TournamentDetailsClient({ initialTournament }: { initial
             data-ai-hint={tournament.dataAiHint as string}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-6 md:p-8">
-            <Badge variant="secondary" className="mb-2">{tournament.game}</Badge>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white shadow-lg">{tournament.name}</h1>
+          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                  <Badge variant="secondary">{tournament.game}</Badge>
+                  <Badge variant={badgeVariant}>{tournament.status}</Badge>
+                  <Badge variant="outline" className="border-white/30 text-white/90">{getEntryType(tournament.format)}</Badge>
+                </div>
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white shadow-lg">{tournament.name}</h1>
+              </div>
+              <div className="text-right">
+                <p className="text-white/80 text-sm">Prize Pool</p>
+                <p className="text-white text-xl md:text-2xl font-bold">৳{tournament.prizePool}</p>
+              </div>
+            </div>
           </div>
         </motion.header>
 
@@ -328,7 +340,7 @@ export default function TournamentDetailsClient({ initialTournament }: { initial
                           </div>
                       </div>
 
-                      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <Accordion type="single" collapsible>
                             <AccordionItem value="room-details" className="border-b-0">
                                 <AccordionTrigger className="bg-muted hover:no-underline rounded-md px-4 py-2.5 text-sm font-semibold border hover:border-primary/50">

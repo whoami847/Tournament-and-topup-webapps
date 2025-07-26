@@ -16,7 +16,7 @@ export default function AdminLayout({
   const isRootAdmin = pathname === '/admin';
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex min-h-screen w-full flex-col md:ml-0" style={{ marginLeft: '0' }}>
       <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
         <div className="flex items-center gap-4">
             {!isRootAdmin ? (

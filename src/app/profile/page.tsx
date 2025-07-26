@@ -720,7 +720,7 @@ export default function ProfilePage() {
 
     return (
         <div className="pb-24">
-            <div className="relative h-48 w-full">
+            <div className="relative h-48 md:h-64 w-full">
                 <Image
                     src={profile?.banner || "https://placehold.co/800x300.png"}
                     alt="Profile banner"
@@ -730,7 +730,7 @@ export default function ProfilePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
                 <div className="absolute top-4 right-4 left-4 z-10 flex items-center justify-between">
-                    <h1 className="text-xl font-bold text-white">Profile</h1>
+                    <h1 className="text-xl md:text-2xl font-bold text-white">Profile</h1>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="bg-black/20 hover:bg-black/40 text-white hover:text-white rounded-full">
@@ -754,39 +754,83 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            <div className="relative z-10 -mt-16 flex flex-col items-center text-center px-4">
-                <div className="relative">
-                    <Avatar className="h-28 w-28 border-4 border-background">
-                        <AvatarImage src={profile?.avatar || user?.photoURL || ''} alt={displayName} />
-                        <AvatarFallback>{fallback}</AvatarFallback>
-                    </Avatar>
-                    <div className="absolute bottom-1 right-1 h-5 w-5 bg-teal-400 rounded-full border-2 border-background" />
+            <div className="container mx-auto max-w-4xl px-4">
+                <div className="relative z-10 -mt-16 md:-mt-20 flex flex-col items-center text-center">
+                    <div className="relative">
+                        <Avatar className="h-28 w-28 md:h-36 md:w-36 border-4 border-background">
+                            <AvatarImage src={profile?.avatar || user?.photoURL || ''} alt={displayName} />
+                            <AvatarFallback className="text-2xl md:text-3xl">{fallback}</AvatarFallback>
+                        </Avatar>
+                        <div className="absolute bottom-1 right-1 h-6 w-6 md:h-7 md:w-7 bg-teal-400 rounded-full border-2 border-background" />
+                    </div>
+                    <h2 className="mt-3 text-2xl md:text-4xl font-bold">{displayName}</h2>
+                    <p className="text-muted-foreground md:text-lg">Player</p>
+                    
+                    {/* Quick Stats for Desktop */}
+                    <div className="hidden md:flex items-center gap-8 mt-6 p-4 bg-card rounded-xl border">
+                        <div className="text-center">
+                            <p className="text-2xl font-bold text-primary">{profile?.winrate || 0}%</p>
+                            <p className="text-sm text-muted-foreground">Win Rate</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-2xl font-bold text-primary">{profile?.games || 0}</p>
+                            <p className="text-sm text-muted-foreground">Games Played</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-2xl font-bold text-primary">{profile?.wins || 0}</p>
+                            <p className="text-sm text-muted-foreground">Wins</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-2xl font-bold text-primary">৳{profile?.balance || 0}</p>
+                            <p className="text-sm text-muted-foreground">Balance</p>
+                        </div>
+                    </div>
                 </div>
-                <h2 className="mt-3 text-3xl font-bold">{displayName}</h2>
-                <p className="text-muted-foreground">Player</p>
-            </div>
-            
-            <div className="px-4 mt-6">
-                <Tabs defaultValue="info" className="w-full">
-                    <TabsList className="flex w-full justify-start gap-2 overflow-x-auto rounded-full border bg-card p-1 sm:justify-center no-scrollbar">
-                        <TabsTrigger value="info" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Information</TabsTrigger>
-                        <TabsTrigger value="team" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Team</TabsTrigger>
-                        <TabsTrigger value="history" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Match History</TabsTrigger>
-                        <TabsTrigger value="success" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Achievements</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="info" className="mt-4">
-                        <UserInfo profile={profile} />
-                    </TabsContent>
-                    <TabsContent value="team" className="mt-4">
-                        <TeamInfo profile={profile} />
-                    </TabsContent>
-                    <TabsContent value="history" className="mt-4">
-                        <MatchHistory profile={profile} />
-                    </TabsContent>
-                    <TabsContent value="success" className="mt-4">
-                        <Achievements />
-                    </TabsContent>
-                </Tabs>
+                
+                <div className="mt-6">
+                    <Tabs defaultValue="info" className="w-full">
+                        <TabsList className="flex w-full justify-start gap-2 overflow-x-auto rounded-full border bg-card p-1 sm:justify-center no-scrollbar">
+                            <TabsTrigger value="info" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Information</TabsTrigger>
+                            <TabsTrigger value="team" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Team</TabsTrigger>
+                            <TabsTrigger value="history" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Match History</TabsTrigger>
+                            <TabsTrigger value="success" className="shrink-0 rounded-full bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none">Achievements</TabsTrigger>
+                        </TabsList>
+                        
+                        {/* Desktop Grid Layout */}
+                        <div className="hidden lg:block mt-6">
+                            <div className="grid lg:grid-cols-2 gap-6">
+                                <TabsContent value="info" className="mt-0">
+                                    <UserInfo profile={profile} />
+                                </TabsContent>
+                                <TabsContent value="team" className="mt-0">
+                                    <TeamInfo profile={profile} />
+                                </TabsContent>
+                                <TabsContent value="history" className="mt-0 lg:col-span-2">
+                                    <MatchHistory profile={profile} />
+                                </TabsContent>
+                                <TabsContent value="success" className="mt-0 lg:col-span-2">
+                                    <Achievements />
+                                </TabsContent>
+                            </div>
+                        </div>
+                        
+                        {/* Mobile Layout */}
+                        <div className="lg:hidden">
+                            <TabsContent value="info" className="mt-4">
+                                <UserInfo profile={profile} />
+                            </TabsContent>
+                            <TabsContent value="team" className="mt-4">
+                                <TeamInfo profile={profile} />
+                            </TabsContent>
+                            <TabsContent value="history" className="mt-4">
+                                <MatchHistory profile={profile} />
+                            </TabsContent>
+                            <TabsContent value="success" className="mt-4">
+                                <Achievements />
+                            </TabsContent>
+                        </div>
+                    </Tabs>
+                </div>
             </div>
         </div>
     );

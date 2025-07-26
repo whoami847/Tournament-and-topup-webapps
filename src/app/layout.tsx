@@ -37,7 +37,7 @@ export default function RootLayout({
             <AuthProvider>
               <AuthGuard>
                 <>
-                  <main className="flex-grow">
+                  <main className="flex-grow md:ml-56">
                     {children}
                   </main>
                   <BottomNav />

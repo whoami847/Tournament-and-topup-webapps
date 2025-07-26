@@ -113,10 +113,15 @@ export default function TournamentsPage() {
   const currentSubModes = subModeOptions[selectedFormat];
 
   return (
-    <div className="container mx-auto px-4 py-8 md:pb-8 pb-24">
-      <div className="space-y-4">
-        <div className="flex justify-end">
-          <div className="w-full md:w-48">
+    <div className="container mx-auto px-4 py-8 md:pb-8 pb-24 max-w-7xl">
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold">Tournaments</h1>
+            <p className="text-muted-foreground">Discover and join esports tournaments</p>
+          </div>
+          <div className="w-full sm:w-48">
             <Select value={selectedGame} onValueChange={(value: Game | 'all') => setSelectedGame(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Filter by game" />
@@ -180,7 +185,7 @@ export default function TournamentsPage() {
         {loading ? (
             <TournamentGridSkeleton />
         ) : filteredTournaments.length > 0 ? (
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <AnimatePresence>
             {filteredTournaments.map(tournament => (
               <motion.div

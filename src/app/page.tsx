@@ -313,8 +313,118 @@ export default function HomePage() {
   return (
     <div className="bg-background text-foreground pb-24">
       <HomeHeader />
-      <div className="container mx-auto px-4 mt-4">
-        <div className="space-y-10">
+      <div className="container mx-auto px-4 mt-4 max-w-7xl">
+        {/* Desktop Layout */}
+        <div className="hidden lg:block">
+          <div className="grid grid-cols-12 gap-8">
+            {/* Main Content */}
+            <div className="col-span-8 space-y-8">
+              <FeaturedEvent banners={banners} />
+              {!loading && liveTournaments.length > 0 && (
+                <section>
+                  <SectionHeader title="Live/Ongoing" />
+                  <div className="grid grid-cols-3 gap-4">
+                    {liveTournaments.slice(0, 6).map((event, i) => (
+                      <Link key={i} href={`/tournaments/${event.id}`}>
+                        <Card className="relative h-48 border-none overflow-hidden rounded-xl hover:scale-105 transition-transform">
+                          <Image src={event.image} alt={event.name} fill className="object-cover" data-ai-hint={event.dataAiHint} />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                          <CardContent className="absolute bottom-0 left-0 p-3 text-white w-full">
+                            <Badge className="mb-1 bg-red-500 text-white border-none font-bold animate-pulse">Live</Badge>
+                            <h4 className="font-bold truncate">{event.name}</h4>
+                            <p className="text-xs text-white/70">{format(new Date(event.startDate as string), "dd.MM.yy '•' HH:mm")}</p>
+                          </CardContent>
+                          <Badge variant="secondary" className="absolute top-2 right-2 text-xs">{event.game}</Badge>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+              <section>
+                <SectionHeader title="Upcoming Matches" actionText="All tournaments" actionHref="/tournaments" />
+                <div className="grid grid-cols-4 gap-6">
+                  {games.slice(0, 8).map((game) => (
+                    <Link 
+                      key={game.id} 
+                      href={`/tournaments?game=${encodeURIComponent(game.name)}`} 
+                      className="rounded-xl overflow-hidden cursor-pointer border-2 border-transparent transition-all bg-card hover:border-primary hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary"
+                    >
+                      <div className="relative aspect-square bg-muted">
+                        <Image src={game.image} alt={game.name} fill className="object-cover" data-ai-hint={game.dataAiHint}/>
+                      </div>
+                      <div className="p-4">
+                        <h4 className="font-semibold text-center text-sm uppercase">{game.name}</h4>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+              <section>
+                <SectionHeader title="Our Supported Games" actionText="All games" actionHref="/games" />
+                <div className="grid grid-cols-2 gap-4">
+                  {games.map((game, i) => (
+                    <Card key={i} className="relative h-32 border-none overflow-hidden rounded-xl hover:scale-105 transition-transform">
+                      <Image src={game.image} alt={game.name} fill className="object-cover" data-ai-hint={game.dataAiHint}/>
+                      <div className="absolute inset-0 bg-black/50" />
+                      <CardContent className="absolute bottom-0 left-0 p-4 text-white">
+                        <h4 className="font-bold">{game.name}</h4>
+                        <p className="text-sm text-white/70">{game.categories}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            </div>
+            
+            {/* Sidebar */}
+            <div className="col-span-4">
+              <div className="sticky top-4 space-y-6">
+                <section>
+                  <SectionHeader title="Top Players" actionText="Full Ranking" actionHref="/leaderboard" />
+                  <TopPlayers players={topPlayers} loading={loadingPlayers} />
+                </section>
+                
+                {/* Quick Stats */}
+                <Card className="p-6">
+                  <h3 className="font-bold mb-4">Quick Stats</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Trophy className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">{tournaments.length}</p>
+                        <p className="text-sm text-muted-foreground">Total Tournaments</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-500/10 rounded-lg">
+                        <Users className="h-5 w-5 text-green-500" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">{topPlayers.length}</p>
+                        <p className="text-sm text-muted-foreground">Active Players</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-500/10 rounded-lg">
+                        <Gamepad2 className="h-5 w-5 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">{games.length}</p>
+                        <p className="text-sm text-muted-foreground">Games Available</p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="lg:hidden space-y-10">
           <FeaturedEvent banners={banners} />
           {!loading && liveTournaments.length > 0 && (
             <section>
