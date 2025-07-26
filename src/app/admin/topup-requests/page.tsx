@@ -57,6 +57,7 @@ export default function AdminTopupRequestsPage() {
                                         <TableHead>Amount</TableHead>
                                         <TableHead>Method</TableHead>
                                         <TableHead>Transaction ID</TableHead>
+                                        <TableHead>Type</TableHead>
                                         <TableHead>Requested</TableHead>
                                         <TableHead>Actions</TableHead>
                                     </TableRow>
@@ -71,6 +72,16 @@ export default function AdminTopupRequestsPage() {
                                             <TableCell>{req.amount} TK</TableCell>
                                             <TableCell>{req.method}</TableCell>
                                             <TableCell className="font-mono text-xs">{req.transactionId}</TableCell>
+                                            <TableCell>
+                                                {req.isForTournament ? (
+                                                    <div className="space-y-1">
+                                                        <div className="text-sm font-medium text-blue-600">Tournament Entry</div>
+                                                        <div className="text-xs text-muted-foreground truncate max-w-[150px]">{req.tournamentName}</div>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-sm">Wallet Top-up</span>
+                                                )}
+                                            </TableCell>
                                             <TableCell>{formatDistanceToNow(new Date(req.requestedAt as string), { addSuffix: true })}</TableCell>
                                             <TableCell className="flex gap-2">
                                                 <Button size="icon" variant="outline" className="text-green-500" onClick={() => handleProcessRequest(req.id, 'approved')}>
@@ -101,6 +112,16 @@ export default function AdminTopupRequestsPage() {
                                     <div className="space-y-1 mb-4 text-sm border-t border-b py-3">
                                         <p><span className="font-medium text-muted-foreground w-24 inline-block">Method:</span> {req.method}</p>
                                         <p><span className="font-medium text-muted-foreground w-24 inline-block">Trx ID:</span> <span className="font-mono text-xs">{req.transactionId}</span></p>
+                                        <p><span className="font-medium text-muted-foreground w-24 inline-block">Type:</span> 
+                                            {req.isForTournament ? (
+                                                <span className="text-blue-600 font-medium">Tournament Entry</span>
+                                            ) : (
+                                                <span>Wallet Top-up</span>
+                                            )}
+                                        </p>
+                                        {req.isForTournament && req.tournamentName && (
+                                            <p><span className="font-medium text-muted-foreground w-24 inline-block">Tournament:</span> <span className="text-xs">{req.tournamentName}</span></p>
+                                        )}
                                     </div>
                                 
                                     <div className="flex justify-between items-center">

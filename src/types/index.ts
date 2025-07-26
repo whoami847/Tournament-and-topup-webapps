@@ -236,6 +236,9 @@ export interface TopupRequest {
   transactionId: string;
   status: 'pending' | 'approved' | 'rejected';
   requestedAt: Timestamp | string;
+  tournamentId?: string;
+  tournamentName?: string;
+  isForTournament?: boolean;
 }
 
 export interface Order {

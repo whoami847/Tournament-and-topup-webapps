@@ -328,9 +328,19 @@ export default function JoinTournamentClient() {
     // Check if user has made payment for this tournament
     const checkPaymentStatus = async (tournamentId: string, userId: string): Promise<boolean> => {
         try {
-            const response = await fetch(`/api/payment/check-status?tournamentId=${tournamentId}&userId=${userId}`);
-            const data = await response.json();
-            return data.hasValidPayment || false;
+            // Check auto payment
+            const autoPaymentResponse = await fetch(`/api/payment/check-status?tournamentId=${tournamentId}&userId=${userId}`);
+            const autoPaymentData = await autoPaymentResponse.json();
+            
+            if (autoPaymentData.hasValidPayment) {
+                return true;
+            }
+
+            // Check manual payment
+            const manualPaymentResponse = await fetch(`/api/manual-payment/check-status?tournamentId=${tournamentId}&userId=${userId}`);
+            const manualPaymentData = await manualPaymentResponse.json();
+            
+            return manualPaymentData.hasValidPayment || false;
         } catch (error) {
             console.error('Error checking payment status:', error);
             return false;

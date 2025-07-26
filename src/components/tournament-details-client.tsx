@@ -167,8 +167,8 @@ export default function TournamentDetailsClient({ initialTournament }: { initial
     }
 
     if (tournament!.entryFee > 0) {
-        // For paid tournaments, directly proceed to payment
-        handlePaymentFlow();
+        // For paid tournaments, show payment options
+        router.push(`/tournaments/${tournament!.id}/payment-options`);
     } else {
         // Free entry
         router.push(`/tournaments/${tournament!.id}/join`);

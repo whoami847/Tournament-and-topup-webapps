@@ -28,3 +28,23 @@ export type Transaction = {
   status: 'Completed' | 'Pending' | 'Failed';
   userId: string;
 };
+
+export type ManualPaymentRequest = {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  tournamentId: string;
+  tournamentName: string;
+  amount: number;
+  paymentMethod: string;
+  transactionId: string;
+  screenshot?: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  submittedAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+  adminNotes?: string;
+};
+
+export type PaymentOption = 'AUTO' | 'MANUAL';
