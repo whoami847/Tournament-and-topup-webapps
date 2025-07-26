@@ -30,39 +30,46 @@ const getTeamType = (format: string = ''): TeamType => {
 };
 
 const generateBracketStructure = (maxTeams: number, tournamentId: string): Round[] => {
+    // Calculate the minimum bracket size that can accommodate maxTeams
     let bracketSize = 2;
     while (bracketSize < maxTeams) bracketSize *= 2;
 
     const roundNamesMap: Record<number, string> = { 2: 'Finals', 4: 'Semi-finals', 8: 'Quarter-finals', 16: 'Round of 16', 32: 'Round of 32', 64: 'Round of 64' };
     const rounds: Round[] = [];
     let currentSize = bracketSize;
-    let isFirstRound = true;
 
     while (currentSize >= 2) {
         const roundName = roundNamesMap[currentSize] || `Round of ${currentSize}`;
         
         let numMatches;
-        if (currentSize === bracketSize) { // This is the first round of the bracket
-             // Number of matches is total teams minus the number of byes needed to fill the next round.
-             // Byes = bracketSize - maxTeams. Teams playing = maxTeams - byes.
-             // Matches = (maxTeams - byes) / 2 = (2 * maxTeams - bracketSize) / 2 = maxTeams - bracketSize / 2
-             numMatches = maxTeams - (bracketSize / 2);
+        if (currentSize === bracketSize) { 
+            // First round: Only create matches for teams that need to play
+            // For 6 teams in 8-team bracket: 6 - 4 = 2 matches needed (4 teams get byes to semifinals)
+            numMatches = Math.max(0, maxTeams - (bracketSize / 2));
         } else {
-             numMatches = currentSize / 2;
+            // Subsequent rounds: normal calculation
+            numMatches = currentSize / 2;
         }
 
-        const matches: Match[] = Array.from({ length: numMatches }, (_, i) => ({
-            id: `${tournamentId}_${roundName.replace(/\s+/g, '-')}_m${i + 1}`,
-            name: `${roundName} #${i + 1}`,
-            teams: [null, null], scores: [0, 0], status: 'pending', resultSubmissionStatus: {}, roomId: '', roomPass: '',
-        }));
-        
-        if (matches.length > 0) {
-            rounds.unshift({ name: roundName, matches }); // Unshift to build from finals backwards
+        // Only create the round if it has matches
+        if (numMatches > 0) {
+            const matches: Match[] = Array.from({ length: numMatches }, (_, i) => ({
+                id: `${tournamentId}_${roundName.replace(/\s+/g, '-')}_m${i + 1}`,
+                name: `${roundName} #${i + 1}`,
+                teams: [null, null], 
+                scores: [0, 0], 
+                status: 'pending', 
+                resultSubmissionStatus: {}, 
+                roomId: '', 
+                roomPass: '',
+            }));
+            
+            rounds.unshift({ name: roundName, matches });
         }
         
         currentSize /= 2;
     }
+    
     return rounds.reverse(); // Reverse to get the correct order from initial round to final
 };
 
